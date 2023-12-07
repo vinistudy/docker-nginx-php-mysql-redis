@@ -8,13 +8,13 @@ services:
     ports:
       - 80:80
       - 443:443
+    environment:
+      TZ: Asia/Shanghai
     volumes:
-      - ./vini123/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./vini123/nginx/conf.d:/etc/nginx/conf.d
       - ./vini123/nginx/etc/cert:/etc/nginx/cert
       - ./vini123/nginx/logs:/var/log/nginx
       - ./vini123/www:/var/www
-      - ./vini123/www/nginx:/var/www/html
     depends_on:
       - php-fpm
 
@@ -23,8 +23,10 @@ services:
     container_name: vini123-php-fpm
     restart: always
     privileged: true
+    environment:
+      TZ: Asia/Shanghai
     volumes:
-      - ./vini123/www/nginx:/var/www/html
+      - ./vini123/www:/var/www
       - ./vini123/www/logs:/var/log/php
     command: bash -c "pecl install redis && docker-php-ext-enable redis && php-fpm"
 
@@ -38,6 +40,7 @@ services:
     restart: always
     privileged: true
     environment:
+      TZ: Asia/Shanghai
       MYSQL_DATABASE: vini123
       MYSQL_USER: vini123
       MYSQL_PASSWORD: vini2023
@@ -52,6 +55,8 @@ services:
       container_name: vini123-redis
       restart: always
       privileged: true
+      environment:
+        TZ: Asia/Shanghai
       ports:
         - "6379:6379"
       volumes:
